@@ -32,27 +32,7 @@ End Sub
 
 Public Sub 自動選號_click()
     init
-    ' 產生 nums 陣列 = {1, 2, ..., 49}
-    Dim i, nums(1 To 49) As Integer
-    For i = 1 To 49
-        nums(i) = i
-    Next
-
-    ' 隨機產生六個大樂透號碼，寫到 LotteryCells(1 to 6)
-    For i = 1 To 6
-        ' 隨機產生一個 i 到 49 之間的亂數 n
-        Dim n As Integer
-        n = Int(Rnd * (49 - i + 1)) + i
-
-        ' 將 nums 的第 i 項的值與第 n 項交換
-        Dim tmp As Integer
-        tmp = nums(i)
-        nums(i) = nums(n)
-        nums(n) = tmp
-
-        ' 寫入 LotteryCells
-        LotteryCells(i).value = nums(i)
-    Next
+    generateLotteryCells ArrayCells:=LotteryCells
 End Sub
 
 Public Sub 儲存號碼_click()
@@ -133,3 +113,27 @@ Public Sub 重置中獎號碼_click()
     init
     Debug.Print ("重置中獎號碼")
 End Sub
+
+Private Function generateLotteryCells(ByRef ArrayCells() As Object)
+    ' 產生 nums 陣列 = {1, 2, ..., 49}
+    Dim i, nums(1 To 49) As Integer
+    For i = 1 To 49
+        nums(i) = i
+    Next
+
+    ' 隨機產生六個大樂透號碼，寫到 ArrayCells
+    For i = LBound(ArrayCells) To UBound(ArrayCells)
+        ' 隨機產生一個 i 到 49 之間的亂數 n
+        Dim n As Integer
+        n = Int(Rnd * (49 - i + 1)) + i
+
+        ' 將 nums 的第 i 項的值與第 n 項交換
+        Dim tmp As Integer
+        tmp = nums(i)
+        nums(i) = nums(n)
+        nums(n) = tmp
+
+        ' 寫入 ArrayCells
+        ArrayCells(i).value = nums(i)
+    Next
+End Function

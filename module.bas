@@ -1,5 +1,3 @@
-' Module.bas
-
 Private LotteryCells(1 To 6) As Object
 Private WinningCells(1 To 7) As Object
 Private Counter As Object
@@ -188,8 +186,10 @@ End Function
 Private Function checkWinningPrize(ByVal no As Integer)
     Dim winning As Integer
     Dim special As Boolean
+    winning = 0
+    special = False
 
-    ' 中獎數目和特別號
+    ' 計算中獎數目和特別號
     Dim i, j As Integer
     For i = 1 To 6
         Dim value As Integer
@@ -209,7 +209,6 @@ Private Function checkWinningPrize(ByVal no As Integer)
             End If
         Next
     Next
-
 
     ' 獎項
     Dim title As String

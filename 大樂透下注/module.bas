@@ -10,6 +10,8 @@ Private Sub init()
         Exit Sub
     End If
 
+    Worksheets("大樂透下注").Select
+
     Set LotteryCells(1) = cells(2, 2)
     Set LotteryCells(2) = cells(2, 3)
     Set LotteryCells(3) = cells(2, 4)
@@ -41,7 +43,19 @@ Public Sub 儲存號碼_click()
         Exit Sub
     End If
 
-    Debug.Print ("儲存號碼")
+    Worksheets("儲存號碼").Select
+
+    ' 編號
+    Counter.value = Counter.value + 1
+    cells(Counter.value + 1, 1).value = Counter.value
+
+    ' 樂透號碼
+    Dim i As Integer
+    For i = 1 To 6
+        cells(Counter.value + 1, i + 1).value = LotteryCells(i)
+    Next
+
+    Worksheets("大樂透下注").Select
 End Sub
 
 Public Sub 清除選號_click()
@@ -72,6 +86,18 @@ Public Sub 重置中獎號碼_click()
     Next
 
     ' TODO: 清除中獎獎項、金額
+End Sub
+
+Public Sub 清除儲存號碼_click()
+    init
+    Worksheets("儲存號碼").Select
+
+    Dim i As Integer
+    For i = 0 To Counter.value
+        Range("A" & (i + 2), "J" & (i + 2)).value = ""
+    Next
+
+    Counter.value = 0
 End Sub
 
 Private Function generateLotteryCells(ByRef ArrayCells() As Object)

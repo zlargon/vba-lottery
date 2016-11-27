@@ -1,6 +1,8 @@
-' Module_大樂透下注.bas
+' Module.bas
 
 Private LotteryCells(1 To 6) As Object
+Private WinningCells(1 To 7) As Object
+Private Counter As Object
 
 Private Sub init()
     Static isInit As Boolean
@@ -8,12 +10,22 @@ Private Sub init()
         Exit Sub
     End If
 
-    Set LotteryCells(1) = Cells(2, 2)
-    Set LotteryCells(2) = Cells(2, 3)
-    Set LotteryCells(3) = Cells(2, 4)
-    Set LotteryCells(4) = Cells(2, 5)
-    Set LotteryCells(5) = Cells(2, 6)
-    Set LotteryCells(6) = Cells(2, 7)
+    Set LotteryCells(1) = cells(2, 2)
+    Set LotteryCells(2) = cells(2, 3)
+    Set LotteryCells(3) = cells(2, 4)
+    Set LotteryCells(4) = cells(2, 5)
+    Set LotteryCells(5) = cells(2, 6)
+    Set LotteryCells(6) = cells(2, 7)
+
+    Set WinningCells(1) = cells(11, 2)
+    Set WinningCells(2) = cells(11, 3)
+    Set WinningCells(3) = cells(11, 4)
+    Set WinningCells(4) = cells(11, 5)
+    Set WinningCells(5) = cells(11, 6)
+    Set WinningCells(6) = cells(11, 7)
+    Set WinningCells(7) = cells(11, 8)
+
+    Set Counter = cells(8, 2)
 
     isInit = True
 End Sub
@@ -107,3 +119,17 @@ Private Function 檢查號碼() As Boolean
     檢查號碼 = True
 End Function
 
+Public Sub 產生中獎號碼_click()
+    init
+    Debug.Print ("產生中獎號碼")
+End Sub
+
+Public Sub 開始兌獎_click()
+    init
+    Debug.Print ("開始兌獎")
+End Sub
+
+Public Sub 重置中獎號碼_click()
+    init
+    Debug.Print ("重置中獎號碼")
+End Sub

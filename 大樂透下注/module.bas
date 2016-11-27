@@ -85,7 +85,16 @@ Public Sub 重置中獎號碼_click()
         cell.value = ""
     Next
 
-    ' TODO: 清除中獎獎項、金額
+    ' 清除中獎獎項、金額
+    Worksheets("儲存號碼").Select
+
+    Dim i As Integer
+    For i = 0 To Counter.value
+        cells(i + 2, "I").value = ""
+        cells(i + 2, "J").value = ""
+    Next
+
+    Worksheets("大樂透下注").Select
 End Sub
 
 Public Sub 清除儲存號碼_click()

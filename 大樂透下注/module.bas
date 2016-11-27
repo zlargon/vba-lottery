@@ -50,10 +50,13 @@ End Sub
 
 Public Sub 清除選號_click()
     init
-    Debug.Print ("清除號碼")
+    For Each cell In LotteryCells
+        cell.value = ""
+    Next
 End Sub
 
 Private Function 檢查號碼() As Boolean
     init
     檢查號碼 = False
 End Function
+

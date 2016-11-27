@@ -76,7 +76,11 @@ Public Sub 開始兌獎_click()
         Exit Sub
     End If
 
-    Debug.Print ("開始兌獎")
+    Worksheets("儲存號碼").Select
+    Dim i As Integer
+    For i = 1 To Counter.value
+        checkWinningPrize (i)
+    Next
 End Sub
 
 Public Sub 重置中獎號碼_click()
@@ -91,7 +95,6 @@ Public Sub 重置中獎號碼_click()
     Dim i As Integer
     For i = 0 To Counter.value
         cells(i + 2, "I").value = ""
-        cells(i + 2, "J").value = ""
     Next
 
     Worksheets("大樂透下注").Select
@@ -101,9 +104,10 @@ Public Sub 清除儲存號碼_click()
     init
     Worksheets("儲存號碼").Select
 
-    Dim i As Integer
+    Dim i, n As Integer
     For i = 0 To Counter.value
-        Range("A" & (i + 2), "J" & (i + 2)).value = ""
+        n = i + 2
+        Range("A" & n, "I" & n).value = ""
     Next
 
     Counter.value = 0
@@ -181,3 +185,51 @@ Private Function checkLotteryCells(ByRef ArrayCells() As Object) As Boolean
     checkLotteryCells = True
 End Function
 
+Private Function checkWinningPrize(ByVal no As Integer)
+    Dim winning As Integer
+    Dim special As Boolean
+
+    ' 中獎數目和特別號
+    Dim i, j As Integer
+    For i = 1 To 6
+        Dim value As Integer
+        value = cells(no + 1, i + 1).value
+
+        For j = LBound(WinningCells) To UBound(WinningCells)
+            If WinningCells(j).value = value Then
+                ' special number
+                If j = UBound(WinningCells) Then
+                    special = True
+                    Exit For
+                End If
+
+                ' winning number
+                winning = winning + 1
+                Exit For
+            End If
+        Next
+    Next
+
+
+    ' 獎項
+    Dim title As String
+    title = "--"
+    If winning = 6 Then
+        title = "頭獎"
+    ElseIf winning = 5 And special = True Then
+        title = "貳獎"
+    ElseIf winning = 5 And special = False Then
+        title = "參獎"
+    ElseIf winning = 4 And special = True Then
+        title = "肆獎"
+    ElseIf winning = 4 And special = False Then
+        title = "伍獎"
+    ElseIf winning = 3 And special = True Then
+        title = "陸獎"
+    ElseIf winning = 2 And special = True Then
+        title = "柒獎"
+    ElseIf winning = 3 And special = False Then
+        title = "柒獎"
+    End If
+    cells(no + 1, "I").value = title
+End Function

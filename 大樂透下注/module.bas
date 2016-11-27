@@ -45,6 +45,10 @@ End Sub
 
 Public Sub 儲存號碼_click()
     init
+    If 檢查號碼 = False Then
+        Exit Sub
+    End If
+
     Debug.Print ("儲存號碼")
 End Sub
 
@@ -57,6 +61,49 @@ End Sub
 
 Private Function 檢查號碼() As Boolean
     init
+    Dim title As String
+    title = "檢查號碼"
     檢查號碼 = False
+
+    Dim i As Integer
+    For i = 1 To 6
+        Dim value
+        value = LotteryCells(i)
+
+        ' 1. 檢查空白欄位
+        If IsEmpty(value) Then
+            MsgBox title:=title, prompt:="第 " & i & " 碼為空值"
+            Exit Function
+        End If
+
+        ' 2. 檢查型別
+        If Not IsNumeric(value) Then
+            MsgBox title:=title, prompt:="第 " & i & " 碼 ( " & value & " ) 必須為整數型別"
+            Exit Function
+        End If
+
+        ' 3. 檢查整數
+        If Round(value) <> value Then
+            MsgBox title:=title, prompt:="第 " & i & " 碼 ( " & value & " ) 必須為整數型別"
+            Exit Function
+        End If
+
+        ' 4. 超出範圍 1 ~ 49
+        If 1 > value Or value > 49 Then
+            MsgBox title:=title, prompt:="第 " & i & " 碼 ( " & value & " ) 超出範圍 1～49"
+            Exit Function
+        End If
+
+        ' 5. 檢查重複
+        Dim j As Integer
+        For j = i + 1 To 6
+            If value = LotteryCells(j).value Then
+                MsgBox title:=title, prompt:="第 " & i & "、" & j & " 碼 ( " & value & " ) 號碼重複"
+                Exit Function
+            End If
+        Next
+    Next
+
+    檢查號碼 = True
 End Function
 

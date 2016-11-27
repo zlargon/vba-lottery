@@ -37,7 +37,7 @@ End Sub
 
 Public Sub 儲存號碼_click()
     init
-    If 檢查號碼 = False Then
+    If checkLotteryCells(LotteryCells) = False Then
         Exit Sub
     End If
 
@@ -51,16 +51,16 @@ Public Sub 清除選號_click()
     Next
 End Sub
 
-Private Function 檢查號碼() As Boolean
-    init
+Private Function checkLotteryCells(ByRef ArrayCells() As Object) As Boolean
+    checkLotteryCells = False
+
     Dim title As String
     title = "檢查號碼"
-    檢查號碼 = False
 
     Dim i As Integer
-    For i = 1 To 6
+    For i = LBound(ArrayCells) To UBound(ArrayCells)
         Dim value
-        value = LotteryCells(i)
+        value = ArrayCells(i)
 
         ' 1. 檢查空白欄位
         If IsEmpty(value) Then
@@ -88,15 +88,15 @@ Private Function 檢查號碼() As Boolean
 
         ' 5. 檢查重複
         Dim j As Integer
-        For j = i + 1 To 6
-            If value = LotteryCells(j).value Then
+        For j = i + 1 To UBound(ArrayCells)
+            If value = ArrayCells(j).value Then
                 MsgBox title:=title, prompt:="第 " & i & "、" & j & " 碼 ( " & value & " ) 號碼重複"
                 Exit Function
             End If
         Next
     Next
 
-    檢查號碼 = True
+    checkLotteryCells = True
 End Function
 
 Public Sub 產生中獎號碼_click()
@@ -137,3 +137,4 @@ Private Function generateLotteryCells(ByRef ArrayCells() As Object)
         ArrayCells(i).value = nums(i)
     Next
 End Function
+

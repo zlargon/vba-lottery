@@ -13,12 +13,12 @@ Private Sub Auto_Open()
     Dim i As Integer
 
     ' 設定 LotteryCells
-    For i = 1 To 6
+    For i = LBound(LotteryCells) To UBound(LotteryCells)
         Set LotteryCells(i) = cells(3, i + 1)
     Next
 
     ' 設定 WinningCells
-    For i = 1 To 7
+    For i = LBound(WinningCells) To UBound(WinningCells)
         Set WinningCells(i) = cells(11, i + 1)
     Next
 
@@ -83,7 +83,7 @@ Public Sub 開獎號碼_儲存_click()
 
     Dim ArrayCells(0 To 7) As Object
     Dim i, j As Integer
-    For i = 0 To 7
+    For i = LBound(ArrayCells) To UBound(ArrayCells)
         Set ArrayCells(i) = cells(Counter.value + Store_Row, i + Store_Col)
     Next
 
@@ -91,7 +91,7 @@ Public Sub 開獎號碼_儲存_click()
     ArrayCells(0) = Counter.value + 1
 
     ' 將 WinningCells 的值複製到 ArrayCells
-    For i = 1 To 7
+    For i = LBound(WinningCells) To UBound(WinningCells)
         ArrayCells(i).value = WinningCells(i).value
     Next
 
@@ -128,12 +128,12 @@ Public Sub 對獎_click()
 
     ' 計算中獎數目和特別號
     Dim i, j As Integer
-    For i = 1 To 6
-        For j = 1 To 7
+    For i = LBound(LotteryCells) To UBound(LotteryCells)
+        For j = LBound(WinningCells) To UBound(WinningCells)
             ' 號碼相同
             If LotteryCells(i).value = WinningCells(j).value Then
                 Dim color As Long
-                If j = 7 Then
+                If j = UBound(WinningCells) Then
                     ' 特別號 (紅色)
                     special = True
                     color = RGB(255, 0, 0)
@@ -147,6 +147,7 @@ Public Sub 對獎_click()
                 LotteryCells(i).Interior.color = color
                 WinningCells(j).Interior.color = color
 
+                ' 跳出迴圈
                 Exit For
             End If
         Next
@@ -199,7 +200,7 @@ End Sub
 Private Function Generate_Lottery_Cells(ByRef ArrayCells() As Object)
     ' 產生 nums 陣列 = {1, 2, ..., 49}
     Dim i, nums(1 To 49) As Integer
-    For i = 1 To 49
+    For i = LBound(nums) To UBound(nums)
         nums(i) = i
     Next
 
@@ -207,7 +208,7 @@ Private Function Generate_Lottery_Cells(ByRef ArrayCells() As Object)
     For i = LBound(ArrayCells) To UBound(ArrayCells)
         ' 隨機產生一個 i 到 49 之間的亂數 n
         Dim n As Integer
-        n = Int(Rnd * (49 - i + 1)) + i
+        n = Int(Rnd * (49 - i + 1) + i)
 
         ' 將 nums 的第 i 項的值與第 n 項交換
         Dim tmp As Integer

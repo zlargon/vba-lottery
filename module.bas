@@ -2,32 +2,51 @@ Private LotteryCells(1 To 6) As Object
 Private WinningCells(1 To 7) As Object
 Private Counter As Object
 
+''''''''''''''''''''''''''
+'       Auto_Open        '
+''''''''''''''''''''''''''
+
 Private Sub Auto_Open()
     Worksheets("大樂透下注").Select
 
-    Set LotteryCells(1) = cells(2, 2)
-    Set LotteryCells(2) = cells(2, 3)
-    Set LotteryCells(3) = cells(2, 4)
-    Set LotteryCells(4) = cells(2, 5)
-    Set LotteryCells(5) = cells(2, 6)
-    Set LotteryCells(6) = cells(2, 7)
+    Set LotteryCells(1) = cells(3, 2)
+    Set LotteryCells(2) = cells(3, 3)
+    Set LotteryCells(3) = cells(3, 4)
+    Set LotteryCells(4) = cells(3, 5)
+    Set LotteryCells(5) = cells(3, 6)
+    Set LotteryCells(6) = cells(3, 7)
 
-    Set WinningCells(1) = cells(12, 2)
-    Set WinningCells(2) = cells(12, 3)
-    Set WinningCells(3) = cells(12, 4)
-    Set WinningCells(4) = cells(12, 5)
-    Set WinningCells(5) = cells(12, 6)
-    Set WinningCells(6) = cells(12, 7)
-    Set WinningCells(7) = cells(12, 8)
+    Set WinningCells(1) = cells(11, 2)
+    Set WinningCells(2) = cells(11, 3)
+    Set WinningCells(3) = cells(11, 4)
+    Set WinningCells(4) = cells(11, 5)
+    Set WinningCells(5) = cells(11, 6)
+    Set WinningCells(6) = cells(11, 7)
+    Set WinningCells(7) = cells(11, 8)
 
-    Set Counter = cells(8, 2)
+    Set Counter = cells(17, 1)
 End Sub
 
-Public Sub 自動選號_click()
+
+''''''''''''''''''''''''''
+'        投注號碼        '
+''''''''''''''''''''''''''
+
+Public Sub 投注號碼_產生_click()
     generateLotteryCells ArrayCells:=LotteryCells
 End Sub
 
-Public Sub 儲存號碼_click()
+Public Sub 投注號碼_檢查_click()
+    Debug.Print "投注號碼_檢查"
+End Sub
+
+Public Sub 投注號碼_清除_click()
+    For Each cell In LotteryCells
+        cell.value = ""
+    Next
+End Sub
+
+Public Sub 投注號碼_儲存_click()
     If checkLotteryCells(LotteryCells) = False Then
         Exit Sub
     End If
@@ -47,29 +66,20 @@ Public Sub 儲存號碼_click()
     Worksheets("大樂透下注").Select
 End Sub
 
-Public Sub 清除選號_click()
-    For Each cell In LotteryCells
-        cell.value = ""
-    Next
-End Sub
 
-Public Sub 產生中獎號碼_click()
+''''''''''''''''''''''''''
+'        開獎號碼        '
+''''''''''''''''''''''''''
+
+Public Sub 開獎號碼_產生_click()
     generateLotteryCells ArrayCells:=WinningCells
 End Sub
 
-Public Sub 開始兌獎_click()
-    If checkLotteryCells(WinningCells) = False Then
-        Exit Sub
-    End If
-
-    Worksheets("儲存號碼").Select
-    Dim i As Integer
-    For i = 1 To Counter.value
-        checkWinningPrize (i)
-    Next
+Public Sub 開獎號碼_檢查_click()
+    Debug.Print "開獎號碼_檢查"
 End Sub
 
-Public Sub 重置中獎號碼_click()
+Public Sub 開獎號碼_清除_click()
     For Each cell In WinningCells
         cell.value = ""
     Next
@@ -85,7 +95,33 @@ Public Sub 重置中獎號碼_click()
     Worksheets("大樂透下注").Select
 End Sub
 
-Public Sub 清除儲存號碼_click()
+Public Sub 開獎號碼_儲存_click()
+    Debug.Print "開獎號碼_儲存"
+End Sub
+
+
+''''''''''''''''''''''''''
+'          對獎          '
+''''''''''''''''''''''''''
+
+Public Sub 對獎_click()
+    If checkLotteryCells(WinningCells) = False Then
+        Exit Sub
+    End If
+
+    Worksheets("儲存號碼").Select
+    Dim i As Integer
+    For i = 1 To Counter.value
+        checkWinningPrize (i)
+    Next
+End Sub
+
+
+''''''''''''''''''''''''''
+'        儲存號碼        '
+''''''''''''''''''''''''''
+
+Public Sub 儲存號碼_清除_click()
     Worksheets("儲存號碼").Select
 
     Dim i, n As Integer
@@ -96,6 +132,11 @@ Public Sub 清除儲存號碼_click()
 
     Counter.value = 0
 End Sub
+
+
+''''''''''''''''''''''''''
+'        Function        '
+''''''''''''''''''''''''''
 
 Private Function generateLotteryCells(ByRef ArrayCells() As Object)
     ' 產生 nums 陣列 = {1, 2, ..., 49}

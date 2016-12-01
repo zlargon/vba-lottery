@@ -1,27 +1,28 @@
 Private LotteryCells(1 To 6) As Object
 Private WinningCells(1 To 7) As Object
 Private Counter As Object
+Const Store_Row As Integer = 19
+Const Store_Col As Integer = 1
+
 
 ''''''''''''''''''''''''''
 '       Auto_Open        '
 ''''''''''''''''''''''''''
 
 Private Sub Auto_Open()
-    Set LotteryCells(1) = cells(3, 2)
-    Set LotteryCells(2) = cells(3, 3)
-    Set LotteryCells(3) = cells(3, 4)
-    Set LotteryCells(4) = cells(3, 5)
-    Set LotteryCells(5) = cells(3, 6)
-    Set LotteryCells(6) = cells(3, 7)
+    Dim i As Integer
 
-    Set WinningCells(1) = cells(11, 2)
-    Set WinningCells(2) = cells(11, 3)
-    Set WinningCells(3) = cells(11, 4)
-    Set WinningCells(4) = cells(11, 5)
-    Set WinningCells(5) = cells(11, 6)
-    Set WinningCells(6) = cells(11, 7)
-    Set WinningCells(7) = cells(11, 8)
+    ' 設定 LotteryCells
+    For i = 1 To 6
+        Set LotteryCells(i) = cells(3, i + 1)
+    Next
 
+    ' 設定 WinningCells
+    For i = 1 To 7
+        Set WinningCells(i) = cells(11, i + 1)
+    Next
+
+    ' 設定計數器
     Set Counter = cells(17, 1)
 End Sub
 
@@ -83,7 +84,7 @@ Public Sub 開獎號碼_儲存_click()
     Dim ArrayCells(0 To 7) As Object
     Dim i, j As Integer
     For i = 0 To 7
-        Set ArrayCells(i) = cells(Counter.value + 19, i + 1)
+        Set ArrayCells(i) = cells(Counter.value + Store_Row, i + Store_Col)
     Next
 
     ' 設定編號
@@ -184,7 +185,7 @@ Public Sub 儲存號碼_清除_click()
     End If
 
     ' 清除儲存格
-    Range(cells(19, 1), cells(Counter.value + 19 - 1, 8)) = ""
+    Range(cells(Store_Row, Store_Col), cells(Counter.value + Store_Row - 1, Store_Col + 7)) = ""
 
     ' 計數器歸零
     Counter.value = 0

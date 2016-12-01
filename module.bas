@@ -2,12 +2,7 @@ Private LotteryCells(1 To 6) As Object
 Private WinningCells(1 To 7) As Object
 Private Counter As Object
 
-Private Sub init()
-    Static isInit As Boolean
-    If isInit = True Then
-        Exit Sub
-    End If
-
+Private Sub Auto_Open()
     Worksheets("大樂透下注").Select
 
     Set LotteryCells(1) = cells(2, 2)
@@ -26,17 +21,13 @@ Private Sub init()
     Set WinningCells(7) = cells(12, 8)
 
     Set Counter = cells(8, 2)
-
-    isInit = True
 End Sub
 
 Public Sub 自動選號_click()
-    init
     generateLotteryCells ArrayCells:=LotteryCells
 End Sub
 
 Public Sub 儲存號碼_click()
-    init
     If checkLotteryCells(LotteryCells) = False Then
         Exit Sub
     End If
@@ -57,19 +48,16 @@ Public Sub 儲存號碼_click()
 End Sub
 
 Public Sub 清除選號_click()
-    init
     For Each cell In LotteryCells
         cell.value = ""
     Next
 End Sub
 
 Public Sub 產生中獎號碼_click()
-    init
     generateLotteryCells ArrayCells:=WinningCells
 End Sub
 
 Public Sub 開始兌獎_click()
-    init
     If checkLotteryCells(WinningCells) = False Then
         Exit Sub
     End If
@@ -82,7 +70,6 @@ Public Sub 開始兌獎_click()
 End Sub
 
 Public Sub 重置中獎號碼_click()
-    init
     For Each cell In WinningCells
         cell.value = ""
     Next
@@ -99,7 +86,6 @@ Public Sub 重置中獎號碼_click()
 End Sub
 
 Public Sub 清除儲存號碼_click()
-    init
     Worksheets("儲存號碼").Select
 
     Dim i, n As Integer

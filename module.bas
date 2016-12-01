@@ -31,6 +31,7 @@ End Sub
 ''''''''''''''''''''''''''
 
 Public Sub 投注號碼_產生_click()
+    Reset_Color
     Generate_Lottery_Cells LotteryCells
 End Sub
 
@@ -43,6 +44,7 @@ Public Sub 投注號碼_檢查_click()
 End Sub
 
 Public Sub 投注號碼_清除_click()
+    Reset_Color
     For Each cell In LotteryCells
         cell.value = ""
     Next
@@ -54,6 +56,7 @@ End Sub
 ''''''''''''''''''''''''''
 
 Public Sub 開獎號碼_產生_click()
+    Reset_Color
     Generate_Lottery_Cells WinningCells
 End Sub
 
@@ -66,6 +69,7 @@ Public Sub 開獎號碼_檢查_click()
 End Sub
 
 Public Sub 開獎號碼_清除_click()
+    Reset_Color
     For Each cell In WinningCells
         cell.value = ""
     Next
@@ -124,18 +128,27 @@ Public Sub 對獎_click()
     ' 計算中獎數目和特別號
     Dim i, j As Integer
     For i = 1 To 6
-        ' 檢查特別號
-        If LotteryCells(i).value = WinningCells(7).value Then
-            special = True
-        Else
-            ' 檢查 1 ~ 6 號
-            For j = 1 To 6
-                If LotteryCells(i).value = WinningCells(j).value Then
+        For j = 1 To 7
+            ' 號碼相同
+            If LotteryCells(i).value = WinningCells(j).value Then
+                Dim color As Long
+                If j = 7 Then
+                    ' 特別號 (紅色)
+                    special = True
+                    color = RGB(255, 0, 0)
+                Else
+                    ' 普通號 (黃色)
                     winning = winning + 1
-                    Exit For
+                    color = RGB(255, 255, 0)
                 End If
-            Next
-        End If
+
+                ' 標示顏色
+                LotteryCells(i).Interior.color = color
+                WinningCells(j).Interior.color = color
+
+                Exit For
+            End If
+        Next
     Next
 
     ' 獎項
@@ -252,4 +265,14 @@ Private Function Check_Lottery_Cells(ByRef ArrayCells() As Object) As Boolean
     Next
 
     Check_Lottery_Cells = True
+End Function
+
+Function Reset_Color()
+    For Each cell In LotteryCells
+        cell.Interior.ColorIndex = xlNone
+    Next
+
+    For Each cell In WinningCells
+        cell.Interior.ColorIndex = xlNone
+    Next
 End Function

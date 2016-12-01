@@ -7,8 +7,6 @@ Private Counter As Object
 ''''''''''''''''''''''''''
 
 Private Sub Auto_Open()
-    Worksheets("大樂透下注").Select
-
     Set LotteryCells(1) = cells(3, 2)
     Set LotteryCells(2) = cells(3, 3)
     Set LotteryCells(3) = cells(3, 4)
@@ -46,26 +44,6 @@ Public Sub 投注號碼_清除_click()
     Next
 End Sub
 
-Public Sub 投注號碼_儲存_click()
-    If checkLotteryCells(LotteryCells) = False Then
-        Exit Sub
-    End If
-
-    Worksheets("儲存號碼").Select
-
-    ' 編號
-    Counter.value = Counter.value + 1
-    cells(Counter.value + 1, 1).value = Counter.value
-
-    ' 樂透號碼
-    Dim i As Integer
-    For i = 1 To 6
-        cells(Counter.value + 1, i + 1).value = LotteryCells(i)
-    Next
-
-    Worksheets("大樂透下注").Select
-End Sub
-
 
 ''''''''''''''''''''''''''
 '        開獎號碼        '
@@ -83,16 +61,6 @@ Public Sub 開獎號碼_清除_click()
     For Each cell In WinningCells
         cell.value = ""
     Next
-
-    ' 清除中獎獎項、金額
-    Worksheets("儲存號碼").Select
-
-    Dim i As Integer
-    For i = 0 To Counter.value
-        cells(i + 2, "I").value = ""
-    Next
-
-    Worksheets("大樂透下注").Select
 End Sub
 
 Public Sub 開獎號碼_儲存_click()
@@ -109,11 +77,7 @@ Public Sub 對獎_click()
         Exit Sub
     End If
 
-    Worksheets("儲存號碼").Select
-    Dim i As Integer
-    For i = 1 To Counter.value
-        checkWinningPrize (i)
-    Next
+    Debug.Print "對獎"
 End Sub
 
 
@@ -122,13 +86,7 @@ End Sub
 ''''''''''''''''''''''''''
 
 Public Sub 儲存號碼_清除_click()
-    Worksheets("儲存號碼").Select
-
-    Dim i, n As Integer
-    For i = 0 To Counter.value
-        n = i + 2
-        Range("A" & n, "I" & n).value = ""
-    Next
+    Debug.Print "儲存號碼_清除"
 
     Counter.value = 0
 End Sub

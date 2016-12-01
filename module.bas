@@ -77,7 +77,7 @@ Public Sub 開獎號碼_儲存_click()
     End If
 
     Dim ArrayCells(0 To 7) As Object
-    Dim i As Integer
+    Dim i, j As Integer
     For i = 0 To 7
         Set ArrayCells(i) = cells(Counter.value + 19, i + 1)
     Next
@@ -88,6 +88,18 @@ Public Sub 開獎號碼_儲存_click()
     ' 將 WinningCells 的值複製到 ArrayCells
     For i = 1 To 7
         ArrayCells(i).value = WinningCells(i).value
+    Next
+
+    ' 由小到大排序 (氣泡排序)
+    For i = 1 To 6
+        For j = i + 1 To 6
+            If ArrayCells(i).value > ArrayCells(j).value Then
+                Dim tmp As Integer
+                tmp = ArrayCells(i).value
+                ArrayCells(i).value = ArrayCells(j).value
+                ArrayCells(j).value = tmp
+            End If
+        Next
     Next
 
     ' 計數器遞增

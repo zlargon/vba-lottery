@@ -72,7 +72,26 @@ Public Sub 開獎號碼_清除_click()
 End Sub
 
 Public Sub 開獎號碼_儲存_click()
-    Debug.Print "開獎號碼_儲存"
+    If Check_Lottery_Cells(WinningCells) = False Then
+        Exit Sub
+    End If
+
+    Dim ArrayCells(0 To 7) As Object
+    Dim i As Integer
+    For i = 0 To 7
+        Set ArrayCells(i) = cells(Counter.value + 19, i + 1)
+    Next
+
+    ' 設定編號
+    ArrayCells(0) = Counter.value + 1
+
+    ' 將 WinningCells 的值複製到 ArrayCells
+    For i = 1 To 7
+        ArrayCells(i).value = WinningCells(i).value
+    Next
+
+    ' 計數器遞增
+    Counter.value = Counter.value + 1
 End Sub
 
 
@@ -94,8 +113,14 @@ End Sub
 ''''''''''''''''''''''''''
 
 Public Sub 儲存號碼_清除_click()
-    Debug.Print "儲存號碼_清除"
+    If Counter.value = 0 Then
+        Exit Sub
+    End If
 
+    ' 清除儲存格
+    Range(cells(19, 1), cells(Counter.value + 19 - 1, 8)) = ""
+
+    ' 計數器歸零
     Counter.value = 0
 End Sub
 

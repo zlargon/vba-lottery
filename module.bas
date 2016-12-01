@@ -31,7 +31,7 @@ End Sub
 ''''''''''''''''''''''''''
 
 Public Sub 投注號碼_產生_click()
-    generateLotteryCells ArrayCells:=LotteryCells
+    Generate_Lottery_Cells LotteryCells
 End Sub
 
 Public Sub 投注號碼_檢查_click()
@@ -54,7 +54,7 @@ End Sub
 ''''''''''''''''''''''''''
 
 Public Sub 開獎號碼_產生_click()
-    generateLotteryCells ArrayCells:=WinningCells
+    Generate_Lottery_Cells WinningCells
 End Sub
 
 Public Sub 開獎號碼_檢查_click()
@@ -100,11 +100,52 @@ End Sub
 ''''''''''''''''''''''''''
 
 Public Sub 對獎_click()
-    If Check_Lottery_Cells(WinningCells) = False Then
+    If Check_Lottery_Cells(LotteryCells) = False Or Check_Lottery_Cells(WinningCells) = False Then
         Exit Sub
     End If
 
-    Debug.Print "對獎"
+    Dim winning As Integer
+    Dim special As Boolean
+    winning = 0
+    special = False
+
+    ' 計算中獎數目和特別號
+    Dim i, j As Integer
+    For i = 1 To 6
+        ' 檢查特別號
+        If LotteryCells(i).value = WinningCells(7).value Then
+            special = True
+        Else
+            ' 檢查 1 ~ 6 號
+            For j = 1 To 6
+                If LotteryCells(i).value = WinningCells(j).value Then
+                    winning = winning + 1
+                    Exit For
+                End If
+            Next
+        End If
+    Next
+
+    ' 獎項
+    If winning = 6 Then
+        MsgBox "頭獎"
+    ElseIf winning = 5 And special = True Then
+        MsgBox "貳獎"
+    ElseIf winning = 5 And special = False Then
+        MsgBox "參獎"
+    ElseIf winning = 4 And special = True Then
+        MsgBox "肆獎"
+    ElseIf winning = 4 And special = False Then
+        MsgBox "伍獎"
+    ElseIf winning = 3 And special = True Then
+        MsgBox "陸獎"
+    ElseIf winning = 2 And special = True Then
+        MsgBox "柒獎"
+    ElseIf winning = 3 And special = False Then
+        MsgBox "普獎"
+    Else
+        MsgBox "沒中獎"
+    End If
 End Sub
 
 
@@ -129,7 +170,7 @@ End Sub
 '        Function        '
 ''''''''''''''''''''''''''
 
-Private Function generateLotteryCells(ByRef ArrayCells() As Object)
+Private Function Generate_Lottery_Cells(ByRef ArrayCells() As Object)
     ' 產生 nums 陣列 = {1, 2, ..., 49}
     Dim i, nums(1 To 49) As Integer
     For i = 1 To 49
@@ -199,54 +240,4 @@ Private Function Check_Lottery_Cells(ByRef ArrayCells() As Object) As Boolean
     Next
 
     Check_Lottery_Cells = True
-End Function
-
-Private Function checkWinningPrize(ByVal no As Integer)
-    Dim winning As Integer
-    Dim special As Boolean
-    winning = 0
-    special = False
-
-    ' 計算中獎數目和特別號
-    Dim i, j As Integer
-    For i = 1 To 6
-        Dim value As Integer
-        value = cells(no + 1, i + 1).value
-
-        For j = LBound(WinningCells) To UBound(WinningCells)
-            If WinningCells(j).value = value Then
-                ' special number
-                If j = UBound(WinningCells) Then
-                    special = True
-                    Exit For
-                End If
-
-                ' winning number
-                winning = winning + 1
-                Exit For
-            End If
-        Next
-    Next
-
-    ' 獎項
-    Dim title As String
-    title = "--"
-    If winning = 6 Then
-        title = "頭獎"
-    ElseIf winning = 5 And special = True Then
-        title = "貳獎"
-    ElseIf winning = 5 And special = False Then
-        title = "參獎"
-    ElseIf winning = 4 And special = True Then
-        title = "肆獎"
-    ElseIf winning = 4 And special = False Then
-        title = "伍獎"
-    ElseIf winning = 3 And special = True Then
-        title = "陸獎"
-    ElseIf winning = 2 And special = True Then
-        title = "柒獎"
-    ElseIf winning = 3 And special = False Then
-        title = "柒獎"
-    End If
-    cells(no + 1, "I").value = title
 End Function

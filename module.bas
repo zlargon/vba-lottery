@@ -215,7 +215,84 @@ End Sub
 ''''''''''''''''''''''''''
 
 Public Sub 儲存號碼_對獎_click()
-    Debug.Print "儲存號碼_對獎"
+    ' 檢查開獎號碼
+    Dim result As String
+    result = Check_Lottery_Cells(WinningCells)
+    If result <> "" Then
+        MsgBox "開獎號碼 " & result
+        Exit Sub
+    End If
+
+    ' 邊檢查，邊對獎
+    Dim i, j, k As Integer
+    For i = 1 To Counter.value
+
+        ' 設定 ArrayCells
+        Dim ArrayCells(1 To 6) As Object
+        For j = LBound(ArrayCells) To UBound(ArrayCells)
+            Set ArrayCells(j) = cells(Store_Row - 1 + i, Store_Col + j)
+        Next
+
+        ' 檢查 ArrayCells
+        If Check_Lottery_Cells(ArrayCells) <> "" Then
+            ' 不合格者，以粉紅色標示
+            For Each cell In ArrayCells
+                cell.Interior.color = RGB(255, 217, 236)
+            Next
+        Else
+            ' 合格者，開始對獎
+            Dim winning As Integer
+            Dim special As Boolean
+            winning = 0
+            special = False
+
+            ' 計算中獎數目和特別號
+            For j = LBound(ArrayCells) To UBound(ArrayCells)
+                For k = LBound(WinningCells) To UBound(WinningCells)
+                    ' 號碼相同
+                    If ArrayCells(j).value = WinningCells(k).value Then
+                        If k = UBound(WinningCells) Then
+                            ' 特別號 (紅色)
+                            special = True
+                            ArrayCells(j).Interior.color = RGB(255, 0, 0)
+                        Else
+                            ' 普通號 (黃色)
+                            winning = winning + 1
+                            ArrayCells(j).Interior.color = RGB(255, 255, 0)
+                        End If
+
+                        ' 跳出迴圈
+                        Exit For
+                    End If
+                Next
+            Next
+
+            ' 獎項
+            Dim award As String
+            If winning = 6 Then
+                award = "頭獎"
+            ElseIf winning = 5 And special = True Then
+                award = "貳獎"
+            ElseIf winning = 5 And special = False Then
+                award = "參獎"
+            ElseIf winning = 4 And special = True Then
+                award = "肆獎"
+            ElseIf winning = 4 And special = False Then
+                award = "伍獎"
+            ElseIf winning = 3 And special = True Then
+                award = "陸獎"
+            ElseIf winning = 2 And special = True Then
+                award = "柒獎"
+            ElseIf winning = 3 And special = False Then
+                award = "普獎"
+            Else
+                award = "--"
+            End If
+
+            ' 寫入獎項
+            cells(Store_Row - 1 + i, Store_Col + 7).value = award
+        End If
+    Next
 End Sub
 
 Public Sub 儲存號碼_檢查_click()

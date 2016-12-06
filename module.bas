@@ -37,11 +37,9 @@ Public Sub 投注號碼_產生_click()
 End Sub
 
 Public Sub 投注號碼_檢查_click()
-    If Check_Lottery_Cells(LotteryCells) = False Then
-        Exit Sub
-    End If
-
-    MsgBox "投注號碼 檢查正確"
+    Dim result As String
+    result = Check_Lottery_Cells(LotteryCells)
+    MsgBox IIf(result = "", "投注號碼 檢查正確", result)
 End Sub
 
 Public Sub 投注號碼_清除_click()
@@ -52,7 +50,10 @@ Public Sub 投注號碼_清除_click()
 End Sub
 
 Public Sub 投注號碼_儲存_click()
-    If Check_Lottery_Cells(LotteryCells) = False Then
+    Dim result As String
+    result = Check_Lottery_Cells(LotteryCells)
+    If Check_Lottery_Cells(LotteryCells) <> "" Then
+        MsgBox result
         Exit Sub
     End If
 
@@ -97,11 +98,9 @@ Public Sub 開獎號碼_產生_click()
 End Sub
 
 Public Sub 開獎號碼_檢查_click()
-    If Check_Lottery_Cells(WinningCells) = False Then
-        Exit Sub
-    End If
-
-    MsgBox "開獎號碼 檢查正確"
+    Dim result As String
+    result = Check_Lottery_Cells(WinningCells)
+    MsgBox IIf(result = "", "開獎號碼 檢查正確", result)
 End Sub
 
 Public Sub 開獎號碼_清除_click()
@@ -266,8 +265,8 @@ Private Function Generate_Lottery_Cells(ByRef ArrayCells() As Object)
     Next
 End Function
 
-Private Function Check_Lottery_Cells(ByRef ArrayCells() As Object) As Boolean
-    Check_Lottery_Cells = False
+Private Function Check_Lottery_Cells(ByRef ArrayCells() As Object) As String
+    Check_Lottery_Cells = ""
 
     Dim i As Integer
     For i = LBound(ArrayCells) To UBound(ArrayCells)
@@ -279,25 +278,25 @@ Private Function Check_Lottery_Cells(ByRef ArrayCells() As Object) As Boolean
 
         ' 1. 檢查空白欄位
         If IsEmpty(value) Then
-            MsgBox name & "不可空值"
+            Check_Lottery_Cells = name & "不可空值"
             Exit Function
         End If
 
         ' 2. 檢查型別
         If Not IsNumeric(value) Then
-            MsgBox name & " ( " & value & " ) 必須為整數型別"
+            Check_Lottery_Cells = name & " ( " & value & " ) 必須為整數型別"
             Exit Function
         End If
 
         ' 3. 檢查整數
         If Round(value) <> value Then
-            MsgBox name & " ( " & value & " ) 必須為整數型別"
+            Check_Lottery_Cells = name & " ( " & value & " ) 必須為整數型別"
             Exit Function
         End If
 
         ' 4. 超出範圍 1 ~ 49
         If 1 > value Or value > 49 Then
-            MsgBox name & " ( " & value & " ) 超出範圍 1～49"
+            Check_Lottery_Cells = name & " ( " & value & " ) 超出範圍 1～49"
             Exit Function
         End If
 
@@ -305,13 +304,11 @@ Private Function Check_Lottery_Cells(ByRef ArrayCells() As Object) As Boolean
         Dim j As Integer
         For j = i + 1 To UBound(ArrayCells)
             If value = ArrayCells(j).value Then
-                MsgBox name & " ( " & value & " ) 號碼重複"
+                Check_Lottery_Cells = name & " ( " & value & " ) 號碼重複"
                 Exit Function
             End If
         Next
     Next
-
-    Check_Lottery_Cells = True
 End Function
 
 Function Reset_Color()

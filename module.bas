@@ -91,7 +91,7 @@ End Sub
 ''''''''''''''''''''''''''
 
 Public Sub 開獎號碼_產生_click()
-    Reset_Color
+    Reset_Stored_Cells
     Generate_Lottery_Cells WinningCells
 End Sub
 
@@ -102,7 +102,7 @@ Public Sub 開獎號碼_檢查_click()
 End Sub
 
 Public Sub 開獎號碼_清除_click()
-    Reset_Color
+    Reset_Stored_Cells
     For Each cell In WinningCells
         cell.value = ""
     Next
@@ -328,7 +328,7 @@ Public Sub 儲存號碼_清除_click()
     End If
 
     ' 清除儲存格
-    Reset_Color
+    Reset_Stored_Cells
     Range(cells(Store_Row, Store_Col), cells(Counter.value + Store_Row - 1, Store_Col + 7)) = ""
 
     ' 計數器歸零
@@ -410,6 +410,10 @@ Private Function Check_Lottery_Cells(ByRef ArrayCells() As Object) As String
     Next
 End Function
 
-Function Reset_Color()
-    Range(cells(Store_Row, Store_Col), cells(Counter.value + Store_Row - 1, Store_Col + 7)).Interior.ColorIndex = xlNone
+Function Reset_Stored_Cells()
+    Dim last_cell As Object
+    Set last_cell = cells(Counter.value + Store_Row - 1, Store_Col + 7)
+
+    Range(cells(Store_Row, Store_Col), last_cell).Interior.ColorIndex = xlNone  ' 恢復預設顏色
+    Range(cells(Store_Row, Store_Col + 7), last_cell).value = ""                ' 清除獎項
 End Function

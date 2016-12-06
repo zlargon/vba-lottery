@@ -52,7 +52,38 @@ Public Sub 投注號碼_清除_click()
 End Sub
 
 Public Sub 投注號碼_儲存_click()
-    Debug.Print "投注號碼_儲存"
+    If Check_Lottery_Cells(LotteryCells) = False Then
+        Exit Sub
+    End If
+
+    Dim ArrayCells(0 To 6) As Object
+    Dim i, j As Integer
+    For i = LBound(ArrayCells) To UBound(ArrayCells)
+        Set ArrayCells(i) = cells(Counter.value + Store_Row, i + Store_Col)
+    Next
+
+    ' 設定編號
+    ArrayCells(0) = Counter.value + 1
+
+    ' 將 LotteryCells 的值複製到 ArrayCells
+    For i = LBound(LotteryCells) To UBound(LotteryCells)
+        ArrayCells(i).value = LotteryCells(i).value
+    Next
+
+    ' 由小到大排序 (氣泡排序)
+    For i = 1 To 6
+        For j = i + 1 To 6
+            If ArrayCells(i).value > ArrayCells(j).value Then
+                Dim tmp As Integer
+                tmp = ArrayCells(i).value
+                ArrayCells(i).value = ArrayCells(j).value
+                ArrayCells(j).value = tmp
+            End If
+        Next
+    Next
+
+    ' 計數器遞增
+    Counter.value = Counter.value + 1
 End Sub
 
 

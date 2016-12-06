@@ -1,7 +1,7 @@
 Private LotteryCells(1 To 6) As Object
 Private WinningCells(1 To 7) As Object
 Private Counter As Object
-Const Store_Row As Integer = 19
+Const Store_Row As Integer = 13
 Const Store_Col As Integer = 1
 
 
@@ -14,16 +14,16 @@ Private Sub Auto_Open()
 
     ' 設定 LotteryCells
     For i = LBound(LotteryCells) To UBound(LotteryCells)
-        Set LotteryCells(i) = cells(3, i + 1)
+        Set LotteryCells(i) = cells(8, i + 1)
     Next
 
     ' 設定 WinningCells
     For i = LBound(WinningCells) To UBound(WinningCells)
-        Set WinningCells(i) = cells(11, i + 1)
+        Set WinningCells(i) = cells(3, i + 1)
     Next
 
     ' 設定計數器
-    Set Counter = cells(17, 1)
+    Set Counter = cells(11, 1)
 End Sub
 
 
@@ -51,6 +51,10 @@ Public Sub 投注號碼_清除_click()
     Next
 End Sub
 
+Public Sub 投注號碼_儲存_click()
+    Debug.Print "投注號碼_儲存"
+End Sub
+
 
 ''''''''''''''''''''''''''
 '        開獎號碼        '
@@ -76,6 +80,7 @@ Public Sub 開獎號碼_清除_click()
     Next
 End Sub
 
+' Unused Function
 Public Sub 開獎號碼_儲存_click()
     If Check_Lottery_Cells(WinningCells) = False Then
         Exit Sub
@@ -116,6 +121,7 @@ End Sub
 '          對獎          '
 ''''''''''''''''''''''''''
 
+' Unused Function
 Public Sub 對獎_click()
     If Check_Lottery_Cells(LotteryCells) = False Or Check_Lottery_Cells(WinningCells) = False Then
         Exit Sub
@@ -179,6 +185,14 @@ End Sub
 ''''''''''''''''''''''''''
 '        儲存號碼        '
 ''''''''''''''''''''''''''
+
+Public Sub 儲存號碼_對獎_click()
+    Debug.Print "儲存號碼_對獎"
+End Sub
+
+Public Sub 儲存號碼_檢查_click()
+    Debug.Print "儲存號碼_檢查"
+End Sub
 
 Public Sub 儲存號碼_清除_click()
     If Counter.value = 0 Then

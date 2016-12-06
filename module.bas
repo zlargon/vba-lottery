@@ -32,7 +32,6 @@ End Sub
 ''''''''''''''''''''''''''
 
 Public Sub 投注號碼_產生_click()
-    Reset_Color
     Generate_Lottery_Cells LotteryCells
 End Sub
 
@@ -43,7 +42,6 @@ Public Sub 投注號碼_檢查_click()
 End Sub
 
 Public Sub 投注號碼_清除_click()
-    Reset_Color
     For Each cell In LotteryCells
         cell.value = ""
     Next
@@ -221,7 +219,30 @@ Public Sub 儲存號碼_對獎_click()
 End Sub
 
 Public Sub 儲存號碼_檢查_click()
-    Debug.Print "儲存號碼_檢查"
+    Dim result As Boolean
+    result = True
+
+    Dim i As Integer
+    For i = 1 To Counter.value
+
+        ' 設定 ArrayCells
+        Dim ArrayCells(1 To 6) As Object
+        For j = LBound(ArrayCells) To UBound(ArrayCells)
+            Set ArrayCells(j) = cells(Store_Row - 1 + i, Store_Col + j)
+        Next
+
+        ' 檢查 ArrayCells，以粉紅色標示不合格的標號
+        If Check_Lottery_Cells(ArrayCells) <> "" Then
+            result = False
+            For Each cell In ArrayCells
+                cell.Interior.color = RGB(255, 217, 236)
+            Next
+        End If
+    Next
+
+    If result = True Then
+        MsgBox "儲存號碼 全部檢查正確"
+    End If
 End Sub
 
 Public Sub 儲存號碼_清除_click()
@@ -230,6 +251,7 @@ Public Sub 儲存號碼_清除_click()
     End If
 
     ' 清除儲存格
+    Reset_Color
     Range(cells(Store_Row, Store_Col), cells(Counter.value + Store_Row - 1, Store_Col + 7)) = ""
 
     ' 計數器歸零
@@ -312,11 +334,5 @@ Private Function Check_Lottery_Cells(ByRef ArrayCells() As Object) As String
 End Function
 
 Function Reset_Color()
-    For Each cell In LotteryCells
-        cell.Interior.ColorIndex = xlNone
-    Next
-
-    For Each cell In WinningCells
-        cell.Interior.ColorIndex = xlNone
-    Next
+    Range(cells(Store_Row, Store_Col), cells(Counter.value + Store_Row - 1, Store_Col + 7)).Interior.ColorIndex = xlNone
 End Function
